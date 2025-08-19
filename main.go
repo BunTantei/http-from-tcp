@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"strings"
 )
 
 const inputFilePath = "message.txt"
@@ -16,6 +17,8 @@ func main() {
 		log.Fatalf("could not open %s: %s\n", inputFilePath, err)
 	}
 	defer f.Close()
+
+	var currentLine string
 
 	fmt.Printf("Reading data from %s\n", inputFilePath)
 	fmt.Println("=====================================")
@@ -31,6 +34,17 @@ func main() {
 			break
 		}
 		str := string(b[:n])
-		fmt.Printf("read: %s\n", str)
+		currentLine += str
+		if strings.Contains(currentLine, "\n") {
+			parts := strings.Split(currentLine, "\n")
+			for i := 0; i < len(parts)-1; i++ {
+				fmt.Printf("read: %s\n", parts[i])
+			}
+			currentLine = parts[len(parts)-1]
+
+		}
+	}
+	if currentLine != "" {
+		fmt.Printf("read: %s\n", currentLine)
 	}
 }
